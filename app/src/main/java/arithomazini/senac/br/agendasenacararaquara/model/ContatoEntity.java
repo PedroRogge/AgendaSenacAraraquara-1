@@ -1,6 +1,8 @@
 package arithomazini.senac.br.agendasenacararaquara.model;
 
-public class ContatoEntity {
+import java.io.Serializable;
+
+public class ContatoEntity implements Serializable {
     private Integer id;
     private String nome;
     private String telefone;

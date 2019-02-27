@@ -16,12 +16,30 @@ import arithomazini.senac.br.agendasenacararaquara.dao.EnderecoDAO;
 import arithomazini.senac.br.agendasenacararaquara.model.ContatoEntity;
 import arithomazini.senac.br.agendasenacararaquara.model.EnderecoEntity;
 
+
 public class ContatoActivity extends AppCompatActivity {
+
+ContatoEntity contato;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contato);
+
+        Intent intent = getIntent();
+
+        contato  = (ContatoEntity) intent.getSerializableExtra("contato");
+
+        if(contato != null){
+            EditText nomeEditText = findViewById(R.id.nomeEditText);
+            EditText telefoneEditText = findViewById(R.id.telefoneEditText);
+            RatingBar pontuacaoRatingBar = findViewById(R.id.pontuacaoRatingBar);
+
+
+            nomeEditText.setText(contato.getNome());
+            telefoneEditText.setText(contato.getTelefone());
+            pontuacaoRatingBar.setProgress(contato.getPontuacao().intValue());
+        }
     }
 
     @Override
@@ -47,23 +65,38 @@ public class ContatoActivity extends AppCompatActivity {
                 EditText numeroEditText = findViewById(R.id.numeroEditText);
                 EditText cidadeEstadoEditText = findViewById(R.id.cidadeEstadoEditText);
 
+                //Edit Text - Buscar
+
+
                 //Rating Bar
                 RatingBar pontuacaoRatingBar = findViewById(R.id.pontuacaoRatingBar);
 
                 //Texto que estavam presentes nos objetos
-                ContatoEntity contato = new ContatoEntity(nomeEditText.getText().toString(),
-                        telefoneEditText.getText().toString(),
-                        Double.valueOf(pontuacaoRatingBar.getProgress()));
+                if (contato != null) {
+                    contato.setNome(nomeEditText.getText().toString());
+                    contato.setTelefone(telefoneEditText.getText().toString());
+                    contato.setPontuacao(Double.valueOf(pontuacaoRatingBar.getProgress()));
+                }else {
+                 contato = new ContatoEntity(nomeEditText.getText().toString(),
+                 telefoneEditText.getText().toString(),Double.valueOf(pontuacaoRatingBar.getProgress()));
 
-                ContatoDAO contatoDAO = new ContatoDAO(ContatoActivity.this);
-                contatoDAO.salvar(contato);
+                }
 
-                EnderecoEntity endereco = new EnderecoEntity(ruaEditText.getText().toString(),
-                        numeroEditText.getText().toString(),
-                        cidadeEstadoEditText.getText().toString());
+                    ContatoEntity contato = new ContatoEntity(nomeEditText.getText().toString(),
+                            telefoneEditText.getText().toString(),
+                            Double.valueOf(pontuacaoRatingBar.getProgress()));
 
-                EnderecoDAO enderecoDAO = new EnderecoDAO(ContatoActivity.this);
-                enderecoDAO.salvar(endereco);
+                    ContatoDAO contatoDAO = new ContatoDAO(ContatoActivity.this);
+                    contatoDAO.salvar(contato);
+
+                    EnderecoEntity endereco = new EnderecoEntity(ruaEditText.getText().toString(),
+                            numeroEditText.getText().toString(),
+                            cidadeEstadoEditText.getText().toString());
+
+                    EnderecoDAO enderecoDAO = new EnderecoDAO(ContatoActivity.this);
+                    enderecoDAO.salvar(endereco);
+
+
 
                 //Exibe uma mensagem
                 Toast.makeText(ContatoActivity.this,
